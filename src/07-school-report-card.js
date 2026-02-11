@@ -41,5 +41,17 @@
  *   // => { name: "Priya", totalMarks: 63, percentage: 31.5, grade: "F", ... }
  */
 export function generateReportCard(student) {
-  // Your code here
+  if (!student || typeof student !== 'object' || typeof student.name !== 'string' || student.name.trim() === '') return null;
+  if (!student.marks || typeof student.marks !== 'object' || Object.keys(student.marks).length === 0) return null;
+  const marks = Object.values(student.marks);
+  if (marks.some(m => typeof m !== 'number' || m < 0 || m > 100)) return null;
+  const totalMarks = marks.reduce((sum, m) => sum + m, 0);
+  const percentage = parseFloat(((totalMarks / (marks.length * 100)) * 100).toFixed(2));
+  const grade = percentage >= 90 ? "A+" : percentage >= 80 ? "A" : percentage >= 70 ? "B" : percentage >= 60 ? "C" : percentage >= 40 ? "D" : "F";
+  const entries = Object.entries(student.marks);
+  const highestSubject = entries.reduce((max, curr) => curr[1] > max[1] ? curr : max)[0];
+  const lowestSubject = entries.reduce((min, curr) => curr[1] < min[1] ? curr : min)[0];
+  const passedSubjects = entries.filter(([, m]) => m >= 40).map(([s]) => s);
+  const failedSubjects = entries.filter(([, m]) => m < 40).map(([s]) => s);
+  return { name: student.name, totalMarks, percentage, grade, highestSubject, lowestSubject, passedSubjects, failedSubjects, subjectCount: marks.length };
 }
