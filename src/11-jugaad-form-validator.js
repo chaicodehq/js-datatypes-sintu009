@@ -69,7 +69,7 @@ export function validateForm(formData) {
   if (typeof email !== 'string' || !email.includes('@') || email.indexOf('@') !== email.lastIndexOf('@') || email.indexOf('.', email.indexOf('@')) === -1) errors.email = "Invalid email format";
   const phone = formData?.phone;
   if (typeof phone !== 'string' || phone.length !== 10 || !/^[6-9]\d{9}$/.test(phone)) errors.phone = "Invalid Indian phone number";
-  const age = parseInt(formData?.age);
+  const age = typeof formData?.age === 'number' ? formData.age : parseInt(formData?.age);
   if (isNaN(age) || !Number.isInteger(age) || age < 16 || age > 100) errors.age = "Age must be an integer between 16 and 100";
   const pincode = formData?.pincode;
   if (typeof pincode !== 'string' || pincode.length !== 6 || !/^[1-9]\d{5}$/.test(pincode)) errors.pincode = "Invalid Indian pincode";

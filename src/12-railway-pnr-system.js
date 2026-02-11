@@ -77,10 +77,7 @@ export function processRailwayPNR(pnrData) {
   if (!pnrData.train || typeof pnrData.train !== 'object') return null;
   if (!Array.isArray(pnrData.passengers) || pnrData.passengers.length === 0) return null;
 
-  const pnrFormatted = pnrData.pnr.slice(0, 3) + "-"
-    + pnrData.pnr.slice(3, 6) + "-"
-    + pnrData.pnr.slice(6);
-
+  const pnrFormatted = pnrData.pnr.slice(0, 3) + "-" + pnrData.pnr.slice(3, 6) + "-" + pnrData.pnr.slice(6);
   const { number, name, from, to } = pnrData.train;
   const trainInfo = `Train: ${number} - ${name} | ${from} → ${to} | Class: ${pnrData.classBooked}`;
 
@@ -113,7 +110,7 @@ export function processRailwayPNR(pnrData) {
   };
 
   const nonCancelled = passengers.filter(p => p.statusLabel !== "CANCELLED");
-  const chartPrepared = nonCancelled.every(p => p.isConfirmed);
+  const chartPrepared = nonCancelled.length === 0 || nonCancelled.every(p => p.isConfirmed);
 
   return { pnrFormatted, trainInfo, passengers, summary, chartPrepared };
 }
